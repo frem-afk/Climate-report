@@ -1,1 +1,57 @@
+---
+title: "Climate analysis report"
+author: "Ruttsnaporn Nuangla"
+date: today 
+keywords: [climate, Co2]
+abstract: This study focus on how temperature effect Co2 
+format: html
+---
+- Global temperature anomaly (NASA GISTEMP)
+- Atmospheric CO~2~ concentration (Mauna Loa Observatory)
+- [Data source](https://climate.nasa.gov/vital-signs/)
+
+> CO2 concentration has risen every year on record since systematic measurement began.
+
+## Data
+- Climate Change from the unique vantage point in space 
+- Nasa coollects critical long-term observations of our changing planet 
+
+```{r}
+
+data_path <- "https://websites.umich.edu/~zhukai/env-data-sci/data"
+
+library(tidyverse)
+mauna_loa_co2 <- read.table(file.path(data_path, "climate", "mauna_loa_co2.txt"), skip = 42, header = FALSE, na.strings = c("-1", "-9.99", "-0.99"))
+colnames(mauna_loa_co2) <- c("year", "month", "decimal_date", "average", "interpolated", "n_day", "stdv_day", "uncertainty_month")
+```
+
+```{r}
+#| include: false
+n_observations <- sum(!is.na(mauna_loa_co2$month))
+n_observations
+```
+```{r}
+#| message: false
+#| warning: false
+
+# Summarize CO2 by decade for the report
+mauna_loa_co2$decade <- floor(mauna_loa_co2$year / 10) * 10
+aggregate(interpolated ~ decade, data = mauna_loa_co2, FUN = mean, na.rm = TRUE)
+```
+
+
+```{r}
+latest_co2 <- round(tail(mauna_loa_co2$interpolated, 1), 1)
+latest_year <- tail(mauna_loa_co2$year, 1)
+```
+
+### Climate data
+
+#### CO2
+
+## Results
+- Ground-based and satellite measurements have measured a sharp increase in atmospheric CO2 in recent decades. 
+- CO2 levels are now 150% the value they were at in 1750 — this is at least 1.5 times greater than the natural increase observed at the end of the last ice age 20,000 years ago
+
+
 
